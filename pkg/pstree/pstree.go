@@ -4,8 +4,8 @@ package pstree
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
+	"fmt"
 	"path/filepath"
 	"regexp"
 )
@@ -43,7 +43,7 @@ func (proc *Process) ReadProcessInfo(pid ProcessID) (err error) {
 
 	// 25926 (a.out) S 25906 31864 31842 ...
 	// 2nd entry is the name in parens, 4th is parent pid
-	re, err := regexp.Compile(`\(([\w\s\/\.:-]+)\)\s[A-Z]\s(\d+)`)
+	re, err := regexp.Compile(`\((.*)\)\s[A-Z]\s(\d+)`)
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (processes ProcessTree) Populate() error {
 func (pids ProcessTree) PrintDepthFirst(pid ProcessID, depth int) string {
 	res := fmt.Sprintf("%*s%v (%v)\n", depth, "", pids[pid].name, pid)
 	for _, kid := range pids[pid].children {
-		res = res + pids.PrintDepthFirst(kid, depth+1)
+		res = res + pids.PrintDepthFirst(kid, depth+3)
 	}
 	return res
 }
